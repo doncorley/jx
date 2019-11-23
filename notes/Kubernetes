@@ -1,10 +1,10 @@
 Minikube JenkinsX:
 
-1. Install core software
+#1. Install core software
 Install Ubuntu + Latest docker
 Install minikube, kubectl, helm, jx
 
-2. Cache jx images
+#2. Cache jx images
 docker pull gcr.io/jenkinsxio/jenkinsx:0.0.80
 docker pull gcr.io/jenkinsxio/jx:2.0.645
 docker pull chartmuseum/chartmuseum:v0.7.1
@@ -14,20 +14,22 @@ docker pull k8s.gcr.io/heapster:v1.5.2
 docker pull k8s.gcr.io/addon-resizer:1.7
 docker pull gcr.io/jenkinsxio/nexus:0.1.7
 
-3. Install k8s
+#3. Install k8s
 minikube delete
 minikube start --vm-driver none --kubernetes-version="v1.16.1"
 
-3.1 Change defaults
-a. Allow beta api
+#3.1 Change defaults
+#a. Allow beta api
 nano /etc/kubernetes/manifests/kube-apiserver.yaml
     - --runtime-config=apps/v1beta1=true,extensions/v1beta1/deployments=true
-b. Add Persistent Volumes to (new) StorageClass and make SC default
+#b. Add Persistent Volumes to (new) StorageClass and make SC default
+git clone https://github.com/doncorley/jx.git
+cd jx/notes
 kubectl apply -f localvolumes.yaml
 kubectl patch storageclass standard -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
 kubectl patch storageclass localsc -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 
-4. Install jx software
+#4. Install jx software
 # minikube addons enable ingress
 # kubectl apply -f /home/dcorley/rbac_helm.yaml
 # helm init --service-account tiller
