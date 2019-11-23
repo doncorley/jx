@@ -1,0 +1,62 @@
+Minikube JenkinsX:
+
+1. Install core software
+Install Ubuntu + Latest docker
+Install minikube, kubectl, helm, jx
+
+2. Cache jx images
+docker pull gcr.io/jenkinsxio/jenkinsx:0.0.80
+docker pull gcr.io/jenkinsxio/jx:2.0.645
+docker pull chartmuseum/chartmuseum:v0.7.1
+docker pull gcr.io/jenkinsxio/builder-jx:2.0.976-312
+docker pull registry:2.6.2
+docker pull k8s.gcr.io/heapster:v1.5.2
+docker pull k8s.gcr.io/addon-resizer:1.7
+docker pull gcr.io/jenkinsxio/nexus:0.1.7
+
+3. Install k8s
+minikube delete
+minikube start --vm-driver none --kubernetes-version="v1.16.1"
+
+3.1 Change defaults
+a. Allow beta api
+nano /etc/kubernetes/manifests/kube-apiserver.yaml
+    - --runtime-config=apps/v1beta1=true,extensions/v1beta1/deployments=true
+b. Add Persistent Volumes to (new) StorageClass and make SC default
+kubectl apply -f localvolumes.yaml
+kubectl patch storageclass standard -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+kubectl patch storageclass localsc -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+
+4. Install jx software
+# minikube addons enable ingress
+# kubectl apply -f /home/dcorley/rbac_helm.yaml
+# helm init --service-account tiller
+LB_IP=47.140.190.118
+DOMAIN=tourgeek.com
+PROVIDER=kubernetes
+INGRESS_NS=kube-system
+INGRESS_DEP=nginx-ingress-controller
+# TILLER_NS=kube-system
+PROJECT=jx
+ADMIN_PASSWORD=admin1!
+# jx create cluster minikube --cpu=4 --default-admin-password=$ADMIN_PASSWORD --vm-driver=none --memory=13314 disk-size=150gb --domain=$DOMAIN --external-ip=$LB_IP --default-environment-prefix $PROJECT
+
+jx install --provider $PROVIDER --external-ip $LB_IP --domain $DOMAIN --default-admin-password $ADMIN_PASSWORD --ingress-namespace $INGRESS_NS --ingress-deployment $INGRESS_DEP --default-environment-prefix $PROJECT
+jx upgrade ingress --cluster true --domain $DOMAIN
+
+5. Test install
+jx create quickstart
+jx get activity -f node-http -w
+
+
+
+Reference:
+https://www.digitalocean.com/community/tutorials/webinar-series-kubernetes-package-management-with-helm-and-ci-cd-with-jenkins-x#step-4-%E2%80%94-setting-up-the-jenkins-x-environment
+https://github.com/jenkins-x/jx/issues/5675
+
+Jenkins token:
+11015511c79159d9a57fbb28e74969008d
+
+kubectl patch pv pvc-df7855e1-d06b-48e6-b68d-1ef6f04f49e0 -p '{"spec":{"persistentVolumeReclaimPolicy":"Retain"}}'
+
+kubectl patch storageclass <your-class-name> -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'

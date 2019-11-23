@@ -1,0 +1,194 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: localsc
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+reclaimPolicy: Retain
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: localvol010-01
+  labels:
+    type: local
+spec:
+  storageClassName: localsc
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/local/minikube/vol010-01"
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: localvol010-02
+  labels:
+    type: local
+spec:
+  storageClassName: localsc
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/local/minikube/vol010-02"
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: localvol010-03
+  labels:
+    type: local
+spec:
+  storageClassName: localsc
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/local/minikube/vol010-03"
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: localvol010-04
+  labels:
+    type: local
+spec:
+  storageClassName: localsc
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/local/minikube/vol010-04"
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: localvol010-05
+  labels:
+    type: local
+spec:
+  storageClassName: localsc
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/local/minikube/vol010-05"
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: localvol030
+  labels:
+    type: local
+spec:
+  storageClassName: localsc
+  capacity:
+    storage: 30Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/local/minikube/vol030"
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: localvol030-01
+  labels:
+    type: local
+spec:
+  storageClassName: localsc
+  capacity:
+    storage: 30Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/local/minikube/vol030-01"
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: localvol030-02
+  labels:
+    type: local
+spec:
+  storageClassName: localsc
+  capacity:
+    storage: 30Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/local/minikube/vol030-02"
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: localvol100-01
+  labels:
+    type: local
+spec:
+  storageClassName: localsc
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/local/minikube/vol100-01"
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: localvol100-02
+  labels:
+    type: local
+spec:
+  storageClassName: localsc
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/local/minikube/vol100-02"
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: localvol500-01
+  labels:
+    type: local
+spec:
+  storageClassName: localsc
+  capacity:
+    storage: 500Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/var/local/minikube/vol500-01"
