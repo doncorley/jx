@@ -2,7 +2,15 @@ Minikube JenkinsX:
 
 #1. Install core software
 Install Ubuntu + Latest docker
-Install minikube, kubectl, helm, jx
+Install git, docker, minikube, kubectl, helm, jx
+
+apt-get install git docker.io jq wget curl
+curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+curl -L "https://github.com/jenkins-x/jx/releases/download/$(curl --silent https://api.github.com/repos/jenkins-x/jx/releases/latest | jq -r '.tag_name')/jx-linux-amd64.tar.gz" | tar xzv "jx"
+install jx /usr/local/bin/
+wget https://get.helm.sh/helm-v2.14.3-linux-amd64.tar.gz
+tar zxvf helm-v2.14.3-linux-amd64.tar.gz
+install linux-amd64/helm /usr/local/bin/
 
 #2. Cache jx images
 docker pull gcr.io/jenkinsxio/jenkinsx:0.0.80
@@ -23,8 +31,8 @@ minikube start --vm-driver none --kubernetes-version="v1.16.1"
 nano /etc/kubernetes/manifests/kube-apiserver.yaml
     - --runtime-config=apps/v1beta1=true,extensions/v1beta1/deployments=true
 #b. Add Persistent Volumes to (new) StorageClass and make SC default
-git clone https://github.com/doncorley/jx.git
-cd jx/notes
+git clone https://github.com/doncorley/jx-setup.git
+cd jx-setup/notes
 kubectl apply -f localvolumes.yaml
 kubectl patch storageclass standard -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
 kubectl patch storageclass localsc -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
@@ -54,11 +62,54 @@ jx get activity -f node-http -w
 
 Reference:
 https://www.digitalocean.com/community/tutorials/webinar-series-kubernetes-package-management-with-helm-and-ci-cd-with-jenkins-x#step-4-%E2%80%94-setting-up-the-jenkins-x-environment
-https://github.com/jenkins-x/jx/issues/5675
+https://gi
+
+thub.com/jenkins-x/jx/issues/5675
 
 Jenkins token:
-11015511c79159d9a57fbb28e74969008d
+11b51ccab8efa7643da29f86aa9156a4ef
 
 kubectl patch pv pvc-df7855e1-d06b-48e6-b68d-1ef6f04f49e0 -p '{"spec":{"persistentVolumeReclaimPolicy":"Retain"}}'
 
 kubectl patch storageclass <your-class-name> -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+
+docker pull prom/alertmanager:v0.18.0
+docker pull jimmidyson/configmap-reload:v0.2.2
+docker pull quay.io/coreos/kube-state-metrics:v1.6.0
+docker pull prom/node-exporter:v0.18.0
+docker pull prom/prometheus:v2.13.1
+docker pull prom/pushgateway:v0.8.0
+docker pull prom/alertmanager:v0.15.2
+docker pull jimmidyson/configmap-reload:v0.2.2
+docker pull busybox:latest
+docker pull quay.io/coreos/kube-state-metrics:v1.4.0
+docker pull prom/node-exporter:v0.16.0
+docker pull prom/prometheus:v2.4.2
+docker pull prom/pushgateway:v0.5.2
+docker pull grafana/grafana:6.4.2
+docker pull dduportal/bats:0.4.0
+docker pull appropriate/curl:latest
+docker pull busybox:1.30
+docker pull kiwigrid/k8s-sidecar:0.1.20
+docker pull grafana/grafana:5.3.2
+docker pull kiwigrid/k8s-sidecar:0.0.3
+# docker pull elasticsearch
+docker pull elasticsearch:6.8.2
+docker pull elasticsearch:6.5.0
+# docker pull kibana
+docker pull kibana:6.8.2
+docker pull kibana:6.5.0
+# docker pull filebeat:6.8.2
+# docker pull filebeat:6.5.0
+# docker pull metricbeat:6.8.2
+# docker pull metricbeat:6.5.0
+# docker pull logstash
+docker pull logstash:6.8.2
+docker pull logstash:6.5.0
+docker pull docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.2
+docker pull docker.elastic.co/elasticsearch/elasticsearch-oss:6.5.0
+docker pull docker.elastic.co/kibana/kibana-oss:6.7.0
+docker pull docker.elastic.co/kibana/kibana-oss:6.5.0
+docker pull gcr.io/google-containers/fluentd-elasticsearch:v2.3.1
+docker pull gcr.io/google-containers/fluentd-elasticsearch:v2.3.2
+
