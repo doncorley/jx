@@ -22,6 +22,10 @@ docker pull k8s.gcr.io/heapster:v1.5.2
 docker pull k8s.gcr.io/addon-resizer:1.7
 docker pull gcr.io/jenkinsxio/nexus:0.1.7
 
+#2.5. Clear cache
+rm -fr .jx
+rm -fr .kube
+
 #3. Install k8s
 minikube delete
 minikube start --vm-driver none --kubernetes-version="v1.16.1"
