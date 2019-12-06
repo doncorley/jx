@@ -23,8 +23,8 @@ docker pull k8s.gcr.io/addon-resizer:1.7
 docker pull gcr.io/jenkinsxio/nexus:0.1.7
 
 #2.5. Clear cache
-rm -fr .jx
-rm -fr .kube
+rm -fr ~/.jx
+rm -fr ~/.kube
 
 #3. Install k8s
 minikube delete
@@ -71,7 +71,7 @@ https://gi
 thub.com/jenkins-x/jx/issues/5675
 
 Jenkins token:
-11b51ccab8efa7643da29f86aa9156a4ef
+11c29cd9e15737fe943bc9a9f1ff949b2a
 
 kubectl patch pv pvc-df7855e1-d06b-48e6-b68d-1ef6f04f49e0 -p '{"spec":{"persistentVolumeReclaimPolicy":"Retain"}}'
 
@@ -116,4 +116,25 @@ docker pull docker.elastic.co/kibana/kibana-oss:6.7.0
 docker pull docker.elastic.co/kibana/kibana-oss:6.5.0
 docker pull gcr.io/google-containers/fluentd-elasticsearch:v2.3.1
 docker pull gcr.io/google-containers/fluentd-elasticsearch:v2.3.2
+
+
+kubectl apply -f ubuntu.yaml --record
+kubectl exec -it -n jx-staging task-pv-pod bash
+chmod -R 1001:1001 /data
+
+# Remove version numbers
+GRAFANA_ADDR=grafana.$PROJECT.$DOMAIN
+PROM_ADDR=prometheus.$PROJECT.$DOMAIN
+AM_ADDR=alert-manager.$PROJECT.$DOMAIN
+KIBANA_ADDR=kibana.$PROJECT.$DOMAIN
+
+helm upgrade -i grafana stable/grafana --namespace metrics --version 2.1.2 --set ingress.hosts="{$GRAFANA_ADDR}" --values mon/grafana-values-bare.yml
+helm upgrade -i prometheus stable/prometheus --namespace metrics --version 7.1.3 --set server.ingress.hosts={$PROM_ADDR} --set alertmanager.ingress.hosts={$AM_ADDR} -f mon/prom-values-nodes.yml
+
+helm upgrade -i fluentd stable/fluentd-elasticsearch --version 1.4.0 --namespace logging --values logging/fluentd-values.yml
+helm upgrade -i kibana stable/kibana --version 0.20.0 --namespace logging --set ingress.hosts="{$KIBANA_ADDR}" --values logging/kibana-values.yml
+helm upgrade -i elasticsearch stable/elasticsearch --version 1.14.1 --namespace logging --values logging/es-values.yml
+
+
+
 

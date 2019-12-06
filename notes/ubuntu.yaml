@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: task-pv-pod
+  namespace: metrics
+spec:
+  volumes:
+    - name: localvol030-03
+      persistentVolumeClaim:
+        claimName: prometheus-server
+  containers:
+    - name: task-pv-container
+      image: ubuntu
+      command: ["sleep", "36000"]
+      volumeMounts:
+        - mountPath: "/data"
+          name: localvol030-03
+
