@@ -45,6 +45,7 @@ kubectl patch storageclass localsc -p '{"metadata": {"annotations":{"storageclas
 # minikube addons enable ingress
 # kubectl apply -f /home/dcorley/rbac_helm.yaml
 # helm init --service-account tiller
+
 LB_IP=47.140.190.118
 DOMAIN=tourgeek.com
 PROVIDER=kubernetes
@@ -53,6 +54,11 @@ INGRESS_DEP=nginx-ingress-controller
 # TILLER_NS=kube-system
 PROJECT=jx
 ADMIN_PASSWORD=admin1!
+GRAFANA_ADDR=grafana.$PROJECT.$DOMAIN
+PROM_ADDR=prometheus.$PROJECT.$DOMAIN
+AM_ADDR=alert-manager.$PROJECT.$DOMAIN
+KIBANA_ADDR=kibana.$PROJECT.$DOMAIN
+
 # jx create cluster minikube --cpu=4 --default-admin-password=$ADMIN_PASSWORD --vm-driver=none --memory=13314 disk-size=150gb --domain=$DOMAIN --external-ip=$LB_IP --default-environment-prefix $PROJECT
 
 jx install --provider $PROVIDER --external-ip $LB_IP --domain $DOMAIN --default-admin-password $ADMIN_PASSWORD --ingress-namespace $INGRESS_NS --ingress-deployment $INGRESS_DEP --default-environment-prefix $PROJECT
@@ -117,23 +123,35 @@ docker pull docker.elastic.co/kibana/kibana-oss:6.5.0
 docker pull gcr.io/google-containers/fluentd-elasticsearch:v2.3.1
 docker pull gcr.io/google-containers/fluentd-elasticsearch:v2.3.2
 
-
-kubectl apply -f ubuntu.yaml --record
-kubectl exec -it -n jx-staging task-pv-pod bash
-chmod -R 1001:1001 /data
+# Fix directory permissions
+# kubectl apply -f ubuntu.yaml --record
+# kubectl exec -it -n jx-staging task-pv-pod bash
+# chmod -R 1001:1001 /data
 
 # Remove version numbers
-GRAFANA_ADDR=grafana.$PROJECT.$DOMAIN
-PROM_ADDR=prometheus.$PROJECT.$DOMAIN
-AM_ADDR=alert-manager.$PROJECT.$DOMAIN
-KIBANA_ADDR=kibana.$PROJECT.$DOMAIN
 
-helm upgrade -i grafana stable/grafana --namespace metrics --version 2.1.2 --set ingress.hosts="{$GRAFANA_ADDR}" --values mon/grafana-values-bare.yml
-helm upgrade -i prometheus stable/prometheus --namespace metrics --version 7.1.3 --set server.ingress.hosts={$PROM_ADDR} --set alertmanager.ingress.hosts={$AM_ADDR} -f mon/prom-values-nodes.yml
+#helm upgrade -i prometheus stable/prometheus --namespace metrics --version 7.1.3 --set server.ingress.hosts={$PROM_ADDR} --set alertmanager.ingress.hosts={$AM_ADDR} -f mon/prom-values-nodes.yml
+#helm upgrade -i grafana stable/grafana --namespace metrics --version 2.1.2 --set ingress.hosts="{$GRAFANA_ADDR}" --values mon/grafana-values-bare.yml
 
-helm upgrade -i fluentd stable/fluentd-elasticsearch --version 1.4.0 --namespace logging --values logging/fluentd-values.yml
-helm upgrade -i kibana stable/kibana --version 0.20.0 --namespace logging --set ingress.hosts="{$KIBANA_ADDR}" --values logging/kibana-values.yml
-helm upgrade -i elasticsearch stable/elasticsearch --version 1.14.1 --namespace logging --values logging/es-values.yml
+#helm upgrade -i elasticsearch stable/elasticsearch --version 1.14.1 --namespace logging --values logging/es-values.yml
+#helm upgrade -i fluentd stable/fluentd-elasticsearch --version 1.4.0 --namespace logging --values logging/fluentd-values.yml
+#helm upgrade -i kibana stable/kibana --version 0.20.0 --namespace logging --set ingress.hosts="{$KIBANA_ADDR}" --values logging/kibana-values.yml
+
+helm upgrade -i prometheus stable/prometheus --namespace metrics --set server.ingress.hosts={$PROM_ADDR} --set alertmanager.ingress.hosts={$AM_ADDR} -f mon/prom-values-phase.yml
+# kubectl apply -f ubuntu.yaml --record
+# kubectl exec -it -n jx-staging task-pv-pod bash
+# chown -R 65534:65534 /data
+helm upgrade -i grafana stable/grafana --namespace metrics --set ingress.hosts="{$GRAFANA_ADDR}" --values mon/grafana-values-bare.yml
+kubectl -n metrics get secret grafana -o jsonpath="{.data.admin-password}" | base64 --decode; echo
+
+helm upgrade -i elasticsearch stable/elasticsearch --namespace logging --values logging/es-values.yml
+helm upgrade -i fluentd stable/fluentd-elasticsearch --namespace logging --values logging/fluentd-values.yml
+
+# Note: Change host name from ELASTICSEARCH_URLS to ELASTICSEARCH_HOSTS in config file:
+# nano logging/kibana-values.yml
+# env:
+#  ELASTICSEARCH_HOSTS: http://elasticsearch-client:9200
+helm upgrade -i kibana stable/kibana --namespace logging --set ingress.hosts="{$KIBANA_ADDR}" --values logging/kibana-values.yml
 
 
 

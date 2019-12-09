@@ -21,7 +21,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/lib/minikube/vol010-01"
+    path: "/var/lib/minikube/volumes/vol010-01"
 
 ---
 
@@ -38,7 +38,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/lib/minikube/vol010-02"
+    path: "/var/lib/minikube/volumes/vol010-02"
 
 ---
 
@@ -55,7 +55,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/lib/minikube/vol010-03"
+    path: "/var/lib/minikube/volumes/vol010-03"
 
 ---
 
@@ -72,7 +72,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/lib/minikube/vol010-04"
+    path: "/var/lib/minikube/volumes/vol010-04"
 
 ---
 
@@ -89,7 +89,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/lib/minikube/vol010-05"
+    path: "/var/lib/minikube/volumes/vol010-05"
 
 ---
 
@@ -106,7 +106,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/lib/minikube/vol010-06"
+    path: "/var/lib/minikube/volumes/vol010-06"
 
 ---
 
@@ -123,7 +123,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/lib/minikube/vol010-07"
+    path: "/var/lib/minikube/volumes/vol010-07"
 
 ---
 
@@ -140,7 +140,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/lib/minikube/vol010-08"
+    path: "/var/lib/minikube/volumes/vol010-08"
 
 ---
 
@@ -157,7 +157,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/lib/minikube/vol010-09"
+    path: "/var/lib/minikube/volumes/vol010-09"
 
 ---
 
@@ -174,7 +174,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/lib/minikube/vol010-10"
+    path: "/var/lib/minikube/volumes/vol010-10"
 
 ---
 
@@ -191,7 +191,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/lib/minikube/vol030-01"
+    path: "/var/lib/minikube/volumes/vol030-01"
 
 ---
 
@@ -208,7 +208,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/lib/minikube/vol030-02"
+    path: "/var/lib/minikube/volumes/vol030-02"
 
 ---
 
@@ -225,7 +225,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/lib/minikube/vol030-03"
+    path: "/var/lib/minikube/volumes/vol030-03"
 
 ---
 
@@ -242,7 +242,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/lib/minikube/vol030-04"
+    path: "/var/lib/minikube/volumes/vol030-04"
 
 ---
 
@@ -259,7 +259,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/lib/minikube/vol030-05"
+    path: "/var/lib/minikube/volumes/vol030-05"
 
 ---
 
@@ -276,7 +276,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/lib/minikube/vol030-06"
+    path: "/var/lib/minikube/volumes/vol030-06"
 
 ---
 
@@ -293,7 +293,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/lib/minikube/vol100-01"
+    path: "/var/lib/minikube/volumes/vol100-01"
 
 ---
 
@@ -310,7 +310,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/lib/minikube/vol100-02"
+    path: "/var/lib/minikube/volumes/vol100-02"
 
 ---
 apiVersion: v1
@@ -326,7 +326,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/lib/minikube/vol100-03"
+    path: "/var/lib/minikube/volumes/vol100-03"
 
 ---
 
@@ -343,7 +343,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/lib/minikube/vol100-04"
+    path: "/var/lib/minikube/volumes/vol100-04"
 
 ---
 
@@ -360,7 +360,7 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/lib/minikube/vol500-01"
+    path: "/var/lib/minikube/volumes/vol500-01"
 
 ---
 
@@ -377,5 +377,5 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/var/lib/minikube/vol500-02"
+    path: "/var/lib/minikube/volumes/vol500-02"
 

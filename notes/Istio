@@ -1,0 +1,23 @@
+istio notes:
+
+#Minikube
+minikube delete
+minikube start --vm-driver none --kubernetes-version="v1.16.1"
+minikube tunnel
+
+# gke
+PROJECT=doncorley
+CLUSTER_NAME=istio
+gcloud container clusters     create $CLUSTER_NAME     --project $PROJECT     --region us-east1     --machine-type n1-standard-2     --enable-autoscaling     --num-nodes 1     --max-nodes 2     --min-nodes 1
+kubectl create clusterrolebinding cluster-admin-binding     --clusterrole=cluster-admin     --user=$(gcloud config get-value core/account)
+
+#all
+# minikube addons enable ingress-dns
+minikube addons enable helm-tiller
+
+istioctl manifest apply --set profile=demo
+kubectl label namespace default istio-injection=enabled
+
+# Port forwarding
+# TRACING=$(kubectl -n istio-system get pod | grep istio-tracing | cut -d ' ' -f 1)
+# kubectl port-forward --address localhost,192.168.1.77 -n istio-system $TRACING 8181:16686
